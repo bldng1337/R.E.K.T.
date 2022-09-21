@@ -64,6 +64,7 @@ public class Main extends Application {
 
     @Override
     public void process() {
+<<<<<<< HEAD
     	ImGui.dockSpaceOverViewport();
     	ImGui.showStyleEditor();
     	if (ImGui.begin("Plot")) {
@@ -83,6 +84,10 @@ public class Main extends Application {
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
+=======
+        ImGui.text("Hello, World!");
+        
+>>>>>>> 5b20a82 (Neue Klasse)
     }
 
     public static void main(String[] args) {
