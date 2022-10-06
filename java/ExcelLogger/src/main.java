@@ -1,22 +1,22 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.List;
 
-public class ExtractorUtils {
-	
-	
-	public static String convertList(List<Float> x) {
-		int l = x.toString().replaceAll(",", ";").length();
-		return x.toString().replaceAll(",", ";").substring(1,l-1);
-		
+public class main {
+
+	public static void main(String[] args) {
+		String FileName = "C:\\5BHet\\kg.csv";
+		writeCVS(FileName);
 	}
-
-	static void writeCVS(String i,String FileName) {
+	
+	private static void writeCVS(String FileName) {
 		
 		try(PrintWriter pw = new PrintWriter(FileName)){
 			
-			pw.write(i);
-			
+			pw.write(12 + ";");
+			pw.write(69 + ";");
+			pw.write(159 + ";");
+			pw.write(69 + ";");
+		
 			
 			System.out.println("File wurde geschrieben");
 			
@@ -29,4 +29,3 @@ public class ExtractorUtils {
 	}
 
 }
-

@@ -16,14 +16,18 @@ import imgui.flag.ImGuiConfigFlags;
 import imgui.type.ImBoolean;
 
 public class Main extends Application {
-	List<Float> data=new LinkedList<>();
+	public static List<Float> data=new LinkedList<>();
 	
     @Override
     protected void configure(Configuration config) {
         config.setTitle("Dear ImGui is Awesome!");
+       
         for(int i=0;i<80;i++)
         	data.add((float)Math.random());
+       String FileName = "C:\\5BHet\\test1.csv";
+       ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), FileName);
     }
+  
     
     @Override
     protected void initImGui(final Configuration config) {
@@ -64,7 +68,6 @@ public class Main extends Application {
 
     @Override
     public void process() {
-<<<<<<< HEAD
     	ImGui.dockSpaceOverViewport();
     	ImGui.showStyleEditor();
     	if (ImGui.begin("Plot")) {
@@ -84,10 +87,6 @@ public class Main extends Application {
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-=======
-        ImGui.text("Hello, World!");
-        
->>>>>>> 5b20a82 (Neue Klasse)
     }
 
     public static void main(String[] args) {
