@@ -12,6 +12,8 @@ import imgui.ImGuiIO;
 import imgui.app.Application;
 import imgui.app.Configuration;
 import imgui.extension.implot.ImPlot;
+import imgui.extension.implot.flag.ImPlotAxisFlags;
+import imgui.extension.implot.flag.ImPlotFlags;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.type.ImBoolean;
 
@@ -22,9 +24,9 @@ public class Main extends Application {
     protected void configure(Configuration config) {
         config.setTitle("Dear ImGui is Awesome!");
        
-        for(int i=0;i<80;i++)
+        for(int i=0;i<300;i++)
         	data.add((float)Math.random());
-       String FileName = "C:\\5BHet\\test1.csv";
+       String FileName = "C:\\Users\\BF\\Desktop\\t.csv";
        ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), FileName);
     }
   
@@ -65,15 +67,21 @@ public class Main extends Application {
     		f[i]=(float) i;
     	return f;
     }
-
+    boolean autoscroll=false;
     @Override
     public void process() {
     	ImGui.dockSpaceOverViewport();
-    	ImGui.showStyleEditor();
+    	//ImGui.showStyleEditor();
+    	if(data.size()>100000)
+    		data.remove(0);
+    	data.add((float)Math.random());
+    	
+    	
     	if (ImGui.begin("Plot")) {
-    		
-	        if (ImPlot.beginPlot("Plot","x","y",ImGui.getContentRegionAvail())) {
-	            ImPlot.plotLine("Line", getxs(data.size()), data.toArray(new Float[data.size()]));
+    		if(ImGui.button("AutoScroll"))
+        		autoscroll=!autoscroll;
+	        if (ImPlot.beginPlot("Plot","x","y",ImGui.getContentRegionAvail(),ImPlotFlags.None , ImPlotAxisFlags.None|(autoscroll?ImPlotAxisFlags.AutoFit:ImPlotAxisFlags.None), ImPlotAxisFlags.AutoFit)) {
+	            ImPlot.plotLine("Line", autoscroll?getxs(200):getxs(data.size()), autoscroll?data.subList(data.size()-200, data.size()).toArray(new Float[200]):data.toArray(new Float[data.size()]));
 	            ImPlot.endPlot();
 	        }
     	}
