@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -48,6 +49,7 @@ public class Main extends Application {
 	    data.put("Feuchtigkeit", new LinkedList<>());
 	    
 	    
+	    
 	  //Start Demo Data
 	    for(int i=0;i<1000;i++)
 	    	data.forEach((a,b)->b.add(new Datapoint((float) (Math.random()*50f),b.size())));
@@ -96,6 +98,25 @@ public class Main extends Application {
     @Override
     public void process() {
     	ImGui.dockSpaceOverViewport();
+    	
+    	if (ImGui.beginMainMenuBar()) {
+	    	if(ImGui.beginMenu("File")) {
+	    		if(ImGui.menuItem("Print to File")) {
+	    			File f=ExtractorUtils.showFileDialog(new File("sdfh"));
+	    			f.getName();
+	    			if(f.getName().endsWith(".csv"))
+	    				ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), f.getAbsolutePath());
+	    			else
+	    				ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), f.getAbsolutePath()+".csv");
+	    		}
+	    		ImGui.endMenu();
+	    	}
+	    	
+	    	ImGui.endMainMenuBar();
+	    }
+    	
+    	
+    	
     	//ImGui.showStyleEditor();
     	data.forEach((a,b)->{
     		if(b.size()>5_000)
