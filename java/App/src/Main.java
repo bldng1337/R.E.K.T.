@@ -21,7 +21,7 @@ import imgui.flag.ImGuiConfigFlags;
 import imgui.type.ImBoolean;
 
 public class Main extends Application {
-	class Datapoint{
+	public static class Datapoint{
 		private final float data;
 		private final long timestamp;
 		public Datapoint(float data,long timestamp) {
@@ -34,6 +34,10 @@ public class Main extends Application {
 		public long getTimestamp() {
 			return timestamp;
 		}
+		@Override
+		public String toString() {
+			return data+"";
+		}
 	}
 	public static Map<String, List<Datapoint>> data=new HashMap<>();
 	
@@ -43,11 +47,12 @@ public class Main extends Application {
 	    data.put("Temperatur", new LinkedList<>());
 	    data.put("Feuchtigkeit", new LinkedList<>());
 	    
-//	    String FileName = "C:\\Users\\BF\\Desktop\\t.csv";
-//		ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), FileName);
+	    
 	  //Start Demo Data
 	    for(int i=0;i<1000;i++)
 	    	data.forEach((a,b)->b.add(new Datapoint((float) (Math.random()*50f),b.size())));
+	    String FileName = "C:\\5BHet\\Ie1.csv";
+		ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), FileName);
     }
   
     
@@ -93,7 +98,7 @@ public class Main extends Application {
     	ImGui.dockSpaceOverViewport();
     	//ImGui.showStyleEditor();
     	data.forEach((a,b)->{
-    		if(b.size()>10_000)
+    		if(b.size()>5_000)
     			b.remove(0);
     	});
     	data.forEach((a,b)->b.add(new Datapoint((float) (Math.random()*50f),b.size())));
