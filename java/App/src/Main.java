@@ -103,7 +103,6 @@ public class Main extends Application {
 	    	if(ImGui.beginMenu("File")) {
 	    		if(ImGui.menuItem("Print to File")) {
 	    			File f=ExtractorUtils.showFileDialog(new File("sdfh"));
-	    			f.getName();
 	    			if(f.getName().endsWith(".csv"))
 	    				ExtractorUtils.writeCVS(ExtractorUtils.convertList(data), f.getAbsolutePath());
 	    			else
