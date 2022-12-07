@@ -2,9 +2,11 @@
 //https://makesmart.net/arduino-ide-arbeiten-mit-json-objekten-fur-einsteiger/
 //for references
 //Include required libraries for wifi connection
-#include "WiFi.h"
-#include "ESPAsyncWebServer.h"
+#include <DNSServer.h>
+#include <WiFi.h>
+#include <AsyncTCP.h>
 #include <ArduinoJson.h>
+#include <ESPAsyncWebServer.h>
 
 //Netzwerk Referenzen eingeben
 const char* ssid = "ESP32-Access-Point-REKT";
@@ -12,17 +14,16 @@ const char* password = "123456789";
 
 //AsyncWebServer auf Port 80 erstellen
 AsyncWebServer server(80);
-
-//-------------------------------------------------
+//
 //Wert auslesen Sensor
 String getTemp(){
-  return 1;
+  return "Temp";
 }
 
 String getDichte(){
-  return 1;
+  return "Dichte";
 }
-//-------------------------------------------------
+//
 
 void setup() {
   //öffnet die serielle Schnittstelle und stellt die Datenrate auf 115200 Bit/s ein. Benutzt für Debuggig purposes
@@ -52,7 +53,7 @@ void setup() {
     request->send_P(200, "text/plain", getTemp().c_str());
   });
   server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", readHumi().c_str());
+    request->send_P(200, "text/plain", getDichte().c_str());
   });
 
   //start server
