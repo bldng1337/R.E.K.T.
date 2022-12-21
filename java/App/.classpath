@@ -11,5 +11,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/App/lib/imgui-app-1.86.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/gson-2.9.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

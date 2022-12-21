@@ -24,8 +24,43 @@ public class ExtractorUtils {
 
 //		int l = x.toString().replaceAll(",", ";").length();
 //		return x.toString().replaceAll(",", ";").substring(1,l-1);
-		return bobdermeister.toString();
+		return transposeCsv(bobdermeister.toString());
 
+	}
+	
+	public static String transposeCsv(String csv) {
+	    // Split the CSV string into rows
+	    String[] rows = csv.split(",");
+	    
+	    // Split each row into columns
+	    String[][] data = new String[rows.length][];
+	    for (int i = 0; i < rows.length; i++) {
+	        data[i] = rows[i].split("\n");
+	    }
+	    
+	    // Create a new 2D array to hold the transposed data
+	    String[][] transposedData = new String[data[0].length][data.length];
+	    
+	    // Iterate over the original data and copy the values into the transposed array
+	    for (int i = 0; i < data.length; i++) {
+	        for (int j = 0; j < data[i].length; j++) {
+	            transposedData[j][i] = data[i][j];
+	        }
+	    }
+	    
+	    // Convert the transposed data array back into a CSV string
+	    StringBuilder sb = new StringBuilder();
+	    for (int i = 0; i < transposedData.length; i++) {
+	        for (int j = 0; j < transposedData[i].length; j++) {
+	            sb.append(transposedData[i][j]);
+	            if (j < transposedData[i].length - 1) {
+	                sb.append(",");
+	            }
+	        }
+	        sb.append("\n");
+	    }
+	    
+	    return sb.toString();
 	}
 
 	static void writeCVS(String i, String FileName) {
