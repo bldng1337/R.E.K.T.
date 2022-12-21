@@ -22,20 +22,18 @@ public class ExtractorUtils {
 			bobdermeister.append("\n");
 		}
 
-//		int l = x.toString().replaceAll(",", ";").length();
-//		return x.toString().replaceAll(",", ";").substring(1,l-1);
 		return transposeCsv(bobdermeister.toString());
 
 	}
 	
 	public static String transposeCsv(String csv) {
 	    // Split the CSV string into rows
-	    String[] rows = csv.split(",");
+	    String[] rows = csv.split("\n");
 	    
 	    // Split each row into columns
 	    String[][] data = new String[rows.length][];
 	    for (int i = 0; i < rows.length; i++) {
-	        data[i] = rows[i].split("\n");
+	        data[i] = rows[i].split(";");
 	    }
 	    
 	    // Create a new 2D array to hold the transposed data
@@ -54,7 +52,7 @@ public class ExtractorUtils {
 	        for (int j = 0; j < transposedData[i].length; j++) {
 	            sb.append(transposedData[i][j]);
 	            if (j < transposedData[i].length - 1) {
-	                sb.append(",");
+	                sb.append(";");
 	            }
 	        }
 	        sb.append("\n");

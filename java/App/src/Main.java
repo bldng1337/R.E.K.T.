@@ -58,7 +58,7 @@ public class Main extends Application {
 		}
 	}
 	
-	
+	volatile boolean gotsensordata=false;
 	// Queue for sending sensor data from the Sensor thread to the Render Thread
 	volatile BlockingQueue<Data> sensordataqueue=new LinkedBlockingQueue<>(200);
 	// A Map saving the differen Datapoints the keys are the Name of the Values and the entry is a LinkedList of Datapoints
@@ -72,7 +72,7 @@ public class Main extends Application {
 	    
 	    //Init the Data we are getting from the Sensors
 	    data.put("Temperatur", new LinkedList<>());
-	    data.put("Feuchtigkeit", new LinkedList<>());
+	    data.put("Dichte", new LinkedList<>());
 	    
 	    //Setting up the Thread polling the Sensor
 	    SensorJob sj=new SensorJob();
@@ -120,6 +120,7 @@ public class Main extends Application {
     class SensorJob implements Runnable{
     	//Last data so we dont poll duplicate Data
     	Data last;
+    	int x=0;
 		@Override
 		public void run() {
 			while(true) {
@@ -130,7 +131,7 @@ public class Main extends Application {
 			           sb.append(sc.next());
 			        }
 			        String result = sb.toString();
-			        
+			        gotsensordata=true;
 			        //Deserialize the JSON
 			    	Gson g=new Gson();
 			    	Data d=g.fromJson(result, Data.class);
@@ -147,13 +148,15 @@ public class Main extends Application {
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
-					e.printStackTrace();
+					//This Exception is expected if the Sensor isnt there
+					gotsensordata=false;
+//					e.printStackTrace();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				//Sleep a bit
 				try {
-					Thread.sleep(2);
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -192,12 +195,22 @@ public class Main extends Application {
 		while(sensordataqueue.peek()!=null) {
 			Data d=sensordataqueue.poll();
 			data.get("Temperatur").add(new Datapoint(d.temp, d.timestamp));
-	    	data.get("Feuchtigkeit").add(new Datapoint(d.hum, d.timestamp));
+	    	data.get("Dichte").add(new Datapoint(d.hum, d.timestamp));
 		}
 		//The only and Main Window responsible for the Plot rednering
     	if (ImGui.begin("Plot")) {
     		if(ImGui.button("AutoScroll"))
         		autoscroll=!autoscroll;
+    		ImGui.sameLine();
+    		if(ImGui.button("Clear Plot"))
+    			data.forEach((a,b)->{
+    				b.clear();
+    			});
+    		ImGui.sameLine();
+    		if(gotsensordata)
+    			ImGui.text("Connected to Sensor");
+    		else
+    			ImGui.text("Cant connect to Sensor");
 	        if (ImPlot.beginPlot("Plot","x","y",ImGui.getContentRegionAvail(),ImPlotFlags.None , ImPlotAxisFlags.None|(autoscroll?ImPlotAxisFlags.AutoFit:ImPlotAxisFlags.None), ImPlotAxisFlags.AutoFit)) {
 	            //Get all the data in the map and plot it
 	        	data.forEach((a,b)->{
@@ -211,7 +224,6 @@ public class Main extends Application {
 	        			(autoscroll?vals.subList(Math.max(vals.size()-100, 0), vals.size()):vals).toArray(new Float[1]));
 	        	});
 	        	
-	            
 	            ImPlot.endPlot();
 	        }
     	}
